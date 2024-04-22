@@ -1,12 +1,18 @@
 package controllers;
 
+//  http://localhost:8080/massage_board1/index
+
+
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import java.util.List;
+import javax.persistence.EntityManager;
+import models.Message;
+import utils.DBUtil;
 /**
  * Servlet implementation class IndexServlet
  */
@@ -26,8 +32,16 @@ public class IndexServlet extends HttpServlet {
          * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
          */
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                // TODO Auto-generated method stub
-                response.getWriter().append("Served at: ").append(request.getContextPath());
+                
+            EntityManager em = DBUtil.createEntityManager();
+
+            List<Message> messages = em.createNamedQuery("getAllMessages", Message.class).getResultList();
+            response.getWriter().append(Integer.valueOf(messages.size()).toString());
+
+            em.close();
+            
+            // TODO Auto-generated method stub
+               // response.getWriter().append("Served at: ").append(request.getContextPath());
         }
 
 }
